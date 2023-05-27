@@ -30,6 +30,7 @@ WORKDIR $PYMESH_PATH
 RUN pip install -r $PYMESH_PATH/python/requirements.txt && \
     python ./setup.py bdist_wheel && \
     rm -rf build_3.8 third_party/build && \
+    sed -i 's/not os.path.exists(dep_lib)/not os.path.exists(dep_lib) and "librt" not in dep_lib/' docker/patches/package_dependencies.py && \
     python $PYMESH_PATH/docker/patches/patch_wheel.py dist/pymesh2*.whl && \
     pip install dist/pymesh2*.whl && \
     python -c "import pymesh; pymesh.test()"
