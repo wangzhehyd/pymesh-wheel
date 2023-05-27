@@ -33,3 +33,6 @@ RUN pip install -r $PYMESH_PATH/python/requirements.txt && \
     python $PYMESH_PATH/docker/patches/patch_wheel.py dist/pymesh2*.whl && \
     pip install dist/pymesh2*.whl && \
     python -c "import pymesh; pymesh.test()"
+
+RUN sed -i 's/path.endswith(".py")/path.endswith(".py") or "third_party" in path/' /opt/_internal/pipx/venvs/auditwheel/lib/python3.10/site-packages/auditwheel/elfutils.py && \
+    auditwheel repair dist/pymesh2*.whl
